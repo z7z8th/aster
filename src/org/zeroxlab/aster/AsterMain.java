@@ -31,6 +31,10 @@ public class AsterMain {
             try {
                 if ("-run".equals(args[0])) {
                     startCLI(args[1]);
+                } else if ("-suite".equals(args[0])) {
+                    startSuiteRunner(args[1]);
+                } else {
+                    usage();
                 }
             } catch(ArrayIndexOutOfBoundsException e) {
                 usage();
@@ -61,6 +65,10 @@ public class AsterMain {
         f.setVisible(true);
     }
 
+    public static void startSuiteRunner(String directory) {
+        AsterSuiteRunner.run(directory);
+    }
+
     private static void trySetupLookFeel() {
         System.setProperty("awt.useSystemAAFontSettings","on");
         System.setProperty("swing.aatext", "true");
@@ -80,6 +88,6 @@ public class AsterMain {
     }
 
     private static void usage() {
-        System.out.printf("Usage: aster [-run TEST.ast]\n\n");
+        System.out.printf("Usage: aster [[-run TEST.ast][-suite DIRECTORY]]\n\n");
     }
 }

@@ -39,6 +39,26 @@
     </target>
 
     <!--
+         junit
+    -->
+    <target name="-compile-junit" depends="init" unless="${useprebuilt}">
+      <subant target="jar">
+	<fileset dir="external" include="junit3.8.2/build.xml"/>
+      </subant>
+    </target>
+    <target name="-jar-junit"
+	    depends="-compile-junit,-jar-junit-build,-jar-junit-prebuilt"
+	    unless="${useprebuilt}" />
+    <target name="-jar-junit-build" unless="${useprebuilt}">
+        <copy file="external/junit3.8.2/dist/junit.jar" todir="${dist.dir}"/>
+    </target>
+    <target name="-jar-junit-prebuilt" if="${useprebuilt}">
+        <copy todir="${dist.dir}/jar">
+            <fileset dir="${prebuilt.dir}/junit" includes="**/*.jar"/>
+        </copy>
+    </target>
+
+    <!--
          ddmlib
     -->
     <target name="-compile-ddmlib" depends="init">
@@ -159,9 +179,9 @@
     <!--
          Targets
     -->
-    <target name="compile" depends="init,-compile-javacv,-compile-ddmlib,-compile-chimpchat,-compile-ninepatch,-compile-owl,-compile-wookieerunner,-compile-aster"/>
+    <target name="compile" depends="init,-compile-javacv,-compile-junit,-compile-ddmlib,-compile-chimpchat,-compile-ninepatch,-compile-owl,-compile-wookieerunner,-compile-aster"/>
 
-    <target name="jar" depends="init,-jar-javacv,-jar-ddmlib,-jar-chimpchat,-jar-ninepatch,-jar-owl,-jar-wookieerunner,-jar-aster"/>
+    <target name="jar" depends="init,-jar-javacv,-jar-junit,-jar-ddmlib,-jar-chimpchat,-jar-ninepatch,-jar-owl,-jar-wookieerunner,-jar-aster"/>
     <target name="dist" depends="jar">
         <copy file="bin/adb" todir="${dist.dir}/bin"/>
         <copy file="etc/wookieerunner/wookieerunner" todir="${dist.dir}"/>
